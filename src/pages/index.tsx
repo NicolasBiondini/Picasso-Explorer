@@ -1,4 +1,6 @@
+import Logo from "@/components/Logo";
 import { Crimson_Text, Mukta } from "next/font/google";
+import Link from "next/link";
 
 const crimson = Crimson_Text({
   weight: ["400", "600", "700"],
@@ -20,7 +22,11 @@ export default function Home() {
     <main
       className={`flex min-h-screen h-full flex-col items-center bg-semiblack text-beige ${crimson.variable} ${mukta.variable} font-mukta`}
     >
-      <h1>Hello world</h1>
+      <nav className=" w-[90%] xl:w-[1224px] h-28 flex items-end">
+        <Link href={""}>
+          <Logo />
+        </Link>
+      </nav>
     </main>
   );
 }
