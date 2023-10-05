@@ -1,22 +1,36 @@
+import Link from "next/link";
 import { TableCell, TableRow } from "./ui/table";
+import { Dispatch, SetStateAction } from "react";
 
 type Props = {
   fields: string[];
   color?: string;
+  link?: Dispatch<SetStateAction<boolean>>;
 };
 
-function TableRows({ fields, color }: Props) {
+function TableRows({ fields, color, link }: Props) {
   return (
     <TableRow className=" ">
       {fields.map((field, index) => {
         return (
           <TableCell
             key={`${field} index ${index}`}
-            className={`font-medium text-beige ${
-              index == 0 && (color ? color : "text-violet")
-            } truncate max-w-[100px] text-center `}
+            className={`font-medium text-beig truncate max-w-[100px] text-center ${
+              index === 0 &&
+              (color ? color + " w-[20px]" : "text-violet w-[20px]")
+            } `}
           >
-            {field}
+            {link ? (
+              <Link
+                className="hover:text-lowviolet"
+                onClick={() => link(true)}
+                href={`/${[fields[1]]}`}
+              >
+                {field}
+              </Link>
+            ) : (
+              field
+            )}
           </TableCell>
         );
       })}
