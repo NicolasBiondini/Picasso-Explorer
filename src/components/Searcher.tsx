@@ -1,13 +1,17 @@
+import { useRouter } from "next/router";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
 
 const regex = /^(0x[0-9a-fA-F]{64})|\d+$/;
 
-type Props = {};
+type Props = {
+  setLoading?: Dispatch<SetStateAction<boolean>>;
+};
 
-const Searcher = (props: Props) => {
+const Searcher = ({ setLoading }: Props) => {
   const [blockId, setBlockId] = useState("");
+  const router = useRouter();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setBlockId(e.target.value);
@@ -15,7 +19,13 @@ const Searcher = (props: Props) => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (regex.test(blockId)) return;
+    console.log(regex.test(blockId));
+    if (!regex.test(blockId)) return;
+    if (setLoading) {
+      setLoading(true);
+    }
+    //router.push(`/${blockId}`);
+    window.history.pushState({}, "", "/hello-world");
   };
 
   return (

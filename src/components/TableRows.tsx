@@ -20,7 +20,7 @@ function TableRows({ fields, color, link }: Props) {
               (color ? color + " w-[20px]" : "text-violet w-[20px]")
             } `}
           >
-            {link ? (
+            {link && index == 0 ? (
               <Link
                 className="hover:text-lowviolet"
                 onClick={() => link(true)}

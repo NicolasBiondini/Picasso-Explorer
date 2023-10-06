@@ -1,10 +1,11 @@
 import { ApiPromise } from "@polkadot/api";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getApi } from "@/lib/getApi";
 import { BlockInfo, EventInfo } from "@/types/block";
+import { useApi } from "./useApi";
+import { useAppContext } from "@/components/context/ContextProvider";
 
-export const useBlocks = (url: string) => {
-  const [api, setApi] = useState<Promise<ApiPromise>>();
+export const useBlocks = () => {
   const [info, setInfo] = useState<{
     blocks: BlockInfo[];
     lastBlock: string;
@@ -19,44 +20,50 @@ export const useBlocks = (url: string) => {
     ibcEvents: [],
   });
 
-  // SetUp api
-  useEffect(() => {
-    setApi(getApi(url));
-  }, []);
+  const { api } = useAppContext();
+
+  // Flag to save lastBlockNumber
+  const flag = useRef("");
 
   // Effect to get new blocks
   useEffect(() => {
     if (!api) return;
-    api.then((apiSession) => {
-      // get new blocks
-      apiSession.derive.chain.subscribeNewBlocks((block) => {
-        // search for IBC connections
-        let extrinsicsList = block.block.extrinsics
-          .filter((ex) => ex.method.section === "ibc")
-          .map((ex) => {
-            return {
-              method: ex.method.method,
-              hash: ex.hash.toHex(),
-              signer: (ex.signer.toHuman() as { Id: string }) || { Id: "" },
-            };
-          });
 
-        // mutate state
-        setInfo((prevInfo) => ({
-          blocks: [
-            {
-              hash: block.block.header.hash.toHex(),
-              author: block.author?.toHuman() || "",
-              number: block.block.header.number.toNumber(),
-            },
-            ...prevInfo.blocks,
-          ],
-          lastBlock: block.block.header.number.toString(),
-          lastTime: prevInfo.time,
-          time: 0,
-          ibcEvents: [...extrinsicsList, ...prevInfo.ibcEvents],
-        }));
-      });
+    // Get new blocks
+    api.derive.chain.subscribeNewBlocks((block) => {
+      // Prevent double added useEffect strict mode, mount, unmount, mount again
+      if (block.block.header.number.toString() === flag.current) {
+        return;
+      }
+      // Search for IBC connections
+      let extrinsicsList = block.block.extrinsics
+        .filter((ex) => ex.method.section === "ibc")
+        .map((ex) => {
+          return {
+            method: ex.method.method,
+            hash: ex.hash.toHex(),
+            signer: (ex.signer.toHuman() as { Id: string }) || { Id: "" },
+          };
+        });
+
+      // Mutate state
+      setInfo((prevInfo) => ({
+        blocks: [
+          {
+            hash: block.block.header.hash.toHex(),
+            author: block.author?.toHuman() || "",
+            number: block.block.header.number.toNumber(),
+          },
+          ...prevInfo.blocks,
+        ],
+        lastBlock: block.block.header.number.toString(),
+        lastTime: prevInfo.time,
+        time: 0,
+        ibcEvents: [...extrinsicsList, ...prevInfo.ibcEvents],
+      }));
+
+      // Update flag
+      flag.current = block.block.header.number.toString();
     });
   }, [api]);
 
@@ -77,6 +84,7 @@ export const useBlocks = (url: string) => {
     time: info.time,
     lastTime: info.lastTime,
     ibcEvents: info.ibcEvents,
+    api: api,
   };
 };
 

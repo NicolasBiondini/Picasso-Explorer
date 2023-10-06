@@ -11,9 +11,7 @@ export default function Home() {
   // Loading flag fetching serverSideProps onClick
   const [isLoading, setLoading] = useState(false);
 
-  const { blocks, lastBlock, time, lastTime, ibcEvents } = useBlocks(
-    "wss://rpc.composablenodes.tech/"
-  );
+  const { blocks, lastBlock, time, lastTime, ibcEvents } = useBlocks();
 
   return (
     <>
@@ -36,7 +34,7 @@ export default function Home() {
                     Insert a block number or hash to see more info
                   </p>
                 </div>
-                <Searcher />
+                <Searcher setLoading={setLoading} />
               </div>
               <div className="flex flex-col gap-y-5 lg:w-[40%]">
                 <div className="flex flex-row gap-x-5">

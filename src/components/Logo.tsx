@@ -11,6 +11,7 @@ function Logo({}: Props) {
       width={194}
       height={80}
       alt="piccasso explorer logo"
+      priority
     />
   );
 }
