@@ -1,16 +1,16 @@
 import Loader from "@/components/Loader";
+import Logo from "@/components/Logo";
+import Pill from "@/components/Pill";
 import Searcher from "@/components/Searcher";
-import { useAppContext } from "@/components/context/ContextProvider";
-import { useApi } from "@/hooks/useApi";
-import useBlocks from "@/hooks/useBlocks";
+import { useAppContext } from "@/context/ContextProvider";
+
 import { getApi } from "@/lib/getApi";
 import { getBlockInfo } from "@/lib/getBlockInfo";
 import { BlockBigInfo } from "@/types/block";
 import { ApiPromise } from "@polkadot/api";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import type { InferGetServerSidePropsType, GetServerSideProps } from "next";
 import Link from "next/link";
-import { useContext, useEffect, useState } from "react";
 
 // Bloock 0x2038af904230fc1d9ed34a448fc52c7ed51b6ee15520ef55b5787b62525e49e6
 // signedBlock.block.hash.toHex()                           block hash
@@ -69,7 +69,8 @@ const BlockPageId = (
   props: InferGetServerSidePropsType<typeof getServerSideProps>
 ) => {
   const { api } = useAppContext();
-  const [block, setBlock] = useState("");
+
+  const block = "";
 
   const {
     data: info,
@@ -85,41 +86,63 @@ const BlockPageId = (
     initialData: props.data,
   });
 
+  const handleSearch = (blockId: string) => {
+    refetch({
+      queryKey: ["info", blockId],
+    });
+  };
+
   if (!props.data.ok)
     return (
-      <section className="text-beige h-[70vh] flex flex-col justify-center items-center gap-10">
-        <h3 className="font-semibold text-3xl">Sorry, block not found 😔</h3>
-        <Link className="hover:text-orange text-xl" href={"/"}>
-          Go back home
-        </Link>
-      </section>
+      <>
+        <nav className=" w-[90%] xl:w-[1224px] h-28 flex items-end justify-between">
+          <Link href={"/"}>
+            <Logo />
+          </Link>
+          <div className="w-[350px]">
+            <Searcher handleSearch={handleSearch} />
+          </div>
+        </nav>{" "}
+        <section className="text-beige h-[70vh] flex flex-col justify-center items-center gap-10">
+          <h3 className="font-semibold text-3xl">Sorry, block not found 😔</h3>
+          <Link className="hover:text-orange text-xl" href={"/"}>
+            Go back home
+          </Link>
+        </section>
+      </>
     );
 
   return (
-    <section className="flex flex-col gap-y-5 w-[90%] xl:w-[1224px] min-h-[85vh] items-center justify-center font-mukta ">
-      <div>
-        <Searcher />
-      </div>
-      {isFetching ? (
-        <Loader />
-      ) : (
-        <>
-          <h1>{info.data.hash}</h1>
-          <button
-            onClick={() => {
-              refetch({
-                queryKey: [
-                  "info",
-                  "0x6811a339673c9daa897944dcdac99c6e2939cc88245ed21951a0a3c9a2be75bc",
-                ],
-              });
-            }}
-          >
-            click me
-          </button>
-        </>
-      )}
-    </section>
+    <>
+      <nav className=" w-[90%] xl:w-[1224px] h-28 flex items-end justify-between">
+        <Link href={"/"}>
+          <Logo />
+        </Link>
+        <div className="lg:w-[350px]">
+          <Searcher handleSearch={handleSearch} />
+        </div>
+      </nav>{" "}
+      <section className="flex flex-col gap-y-5 w-[90%] xl:w-[1224px] min-h-[85vh] items-center justify-center font-mukta ">
+        {isFetching ? (
+          <Loader />
+        ) : (
+          <>
+            <div className="flex flex-row gap-3 flex-wrap justify-center w-full">
+              <Pill title="Block Number" info={info.data.number.toString()} />
+              <Pill title="Block Hash" info={info.data.hash} />
+              <Pill
+                title="Parent Hash"
+                info={info.data.parentHash}
+                link={info.data.parentHash}
+                linkColor="text-lowviolet hover:text-violet"
+              />
+              <Pill title="State root" info={info.data.state} />
+            </div>
+            <Pill title="Extrinsic root" info={info.data.extrinsicRoot} />
+          </>
+        )}
+      </section>
+    </>
   );
 };
 

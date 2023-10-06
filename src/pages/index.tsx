@@ -15,6 +15,11 @@ export default function Home() {
 
   return (
     <>
+      <nav className=" w-[90%] xl:w-[1224px] h-28 flex items-end justify-between">
+        <Link href={"/"}>
+          <Logo />
+        </Link>
+      </nav>
       <section className="flex flex-col gap-y-5 w-[90%] xl:w-[1224px] min-h-[85vh] items-center justify-center font-mukta ">
         {lastBlock === "" || isLoading ? (
           <Loader />

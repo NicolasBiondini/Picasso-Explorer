@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { getApi } from "@/lib/getApi";
 import { BlockInfo, EventInfo } from "@/types/block";
 import { useApi } from "./useApi";
-import { useAppContext } from "@/components/context/ContextProvider";
+import { useAppContext } from "@/context/ContextProvider";
 
 export const useBlocks = () => {
   const [info, setInfo] = useState<{

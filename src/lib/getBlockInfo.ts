@@ -21,7 +21,7 @@ export const getBlockInfo = async (
   try {
     let blockHash = blockId;
 
-    console.log("tryiiiing" + blockId);
+    console.log("tryiiiing" + blockHash);
     // Check if is hash or block number
     // If it's a block number, get block hash
     if (!regex.test(blockHash)) {

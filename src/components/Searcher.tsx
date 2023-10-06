@@ -7,9 +7,10 @@ const regex = /^(0x[0-9a-fA-F]{64})|\d+$/;
 
 type Props = {
   setLoading?: Dispatch<SetStateAction<boolean>>;
+  handleSearch?: (blockId: string) => void;
 };
 
-const Searcher = ({ setLoading }: Props) => {
+const Searcher = ({ setLoading, handleSearch }: Props) => {
   const [blockId, setBlockId] = useState("");
   const router = useRouter();
 
@@ -23,9 +24,13 @@ const Searcher = ({ setLoading }: Props) => {
     if (!regex.test(blockId)) return;
     if (setLoading) {
       setLoading(true);
+      router.push(`/${blockId}`);
+      return;
     }
-    //router.push(`/${blockId}`);
-    window.history.pushState({}, "", "/hello-world");
+    if (handleSearch) {
+      window.history.pushState({}, "", `/${blockId}`);
+      handleSearch(blockId);
+    }
   };
 
   return (

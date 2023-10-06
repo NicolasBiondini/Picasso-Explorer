@@ -4,7 +4,7 @@ import type { AppProps } from "next/app";
 import { Crimson_Text, Mukta } from "next/font/google";
 import Link from "next/link";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ContextProvider } from "@/components/context/ContextProvider";
+import { ContextProvider } from "@/context/ContextProvider";
 
 const crimson = Crimson_Text({
   weight: ["400", "600", "700"],
@@ -30,11 +30,6 @@ export default function App({ Component, pageProps }: AppProps) {
         <main
           className={`flex min-h-screen h-full flex-col items-center bg-semiblack text-beige ${crimson.variable} ${mukta.variable} font-mukta`}
         >
-          <nav className=" w-[90%] xl:w-[1224px] h-28 flex items-end justify-between">
-            <Link href={"/"}>
-              <Logo />
-            </Link>
-          </nav>
           <Component {...pageProps} />
         </main>
       </QueryClientProvider>
