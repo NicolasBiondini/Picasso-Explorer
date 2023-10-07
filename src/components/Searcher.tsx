@@ -1,7 +1,8 @@
+import { ChangeEvent, Dispatch, SetStateAction } from "react";
 import { useRouter } from "next/router";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ChangeEvent, Dispatch, SetStateAction } from "react";
+import { toast } from "react-toastify";
 
 const regex = /^(0x[0-9a-fA-F]{64})|\d+$/;
 
@@ -28,7 +29,10 @@ const Searcher = ({
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!regex.test(blockId)) return;
+    if (!regex.test(blockId))
+      return toast.error("Not a valid hash or block number. Try again! ", {
+        position: toast.POSITION.TOP_RIGHT,
+      });
 
     if (setLoading) {
       setLoading(true);
