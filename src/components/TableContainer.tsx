@@ -9,16 +9,16 @@ import {
 type Props = {
   title: string;
   titles: string[];
-  children: JSX.Element[];
-  bg?: string;
+  children?: JSX.Element[];
+  clasName?: string;
 };
 
-const TableContainer = ({ title, titles, children, bg }: Props) => {
+const TableContainer = ({ title, titles, children, clasName }: Props) => {
   return (
     <div
-      className={`py-8 px-8 ${
-        bg ? bg : "bg-blacklight"
-      }   flex flex-col gap-8 justify-center items-center rounded-lg lg:w-1/2`}
+      className={`py-8 px-8 flex flex-col gap-8 justify-center items-center rounded-lg lg:w-1/2 ${
+        clasName ? clasName : "bg-blacklight"
+      }   `}
     >
       <h4 className="self-start font-semibold text-2xl font-crimson">
         {title}
@@ -29,7 +29,10 @@ const TableContainer = ({ title, titles, children, bg }: Props) => {
             <TableRow>
               {titles.map((selectedTitle) => {
                 return (
-                  <TableHead key={selectedTitle} className="text-center">
+                  <TableHead
+                    key={selectedTitle}
+                    className="text-center font-bold"
+                  >
                     {selectedTitle}
                   </TableHead>
                 );

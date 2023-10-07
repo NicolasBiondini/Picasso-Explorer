@@ -1,17 +1,25 @@
 import { useRouter } from "next/router";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
+import { ChangeEvent, Dispatch, SetStateAction } from "react";
 
 const regex = /^(0x[0-9a-fA-F]{64})|\d+$/;
 
 type Props = {
+  blockId: string;
+  setBlockId: Dispatch<SetStateAction<string>>;
   setLoading?: Dispatch<SetStateAction<boolean>>;
   handleSearch?: (blockId: string) => void;
+  className?: string;
 };
 
-const Searcher = ({ setLoading, handleSearch }: Props) => {
-  const [blockId, setBlockId] = useState("");
+const Searcher = ({
+  blockId,
+  setBlockId,
+  setLoading,
+  handleSearch,
+  className,
+}: Props) => {
   const router = useRouter();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -20,32 +28,32 @@ const Searcher = ({ setLoading, handleSearch }: Props) => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(regex.test(blockId));
     if (!regex.test(blockId)) return;
+
     if (setLoading) {
       setLoading(true);
       router.push(`/${blockId}`);
       return;
     }
     if (handleSearch) {
-      window.history.pushState({}, "", `/${blockId}`);
       handleSearch(blockId);
+      window.history.pushState({}, "", `/${blockId}`);
     }
   };
 
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex w-full flex-row max-w-sm items-center space-x-2 "
+      className={`flex max-w-[80%] md:w-full flex-row items-center space-x-2 ${className}`}
     >
       <Input
-        className="bg-beige text-violet placeholder:text-violet placeholder:font-medium placeholder:text-md "
+        className="bg-beige w-[70%] text-violet placeholder:text-violet placeholder:font-medium placeholder:text-md "
         type="text"
         placeholder="Introduce a block number or hash"
         onChange={handleChange}
         value={blockId}
       />
-      <Button className=" bg-lowviolet hover:bg-violet" type="submit">
+      <Button className="w-[30%] bg-lowviolet hover:bg-violet" type="submit">
         Search
       </Button>
     </form>

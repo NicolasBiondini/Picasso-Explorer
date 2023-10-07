@@ -1,6 +1,6 @@
+import { Dispatch, SetStateAction } from "react";
 import Link from "next/link";
 import { TableCell, TableRow } from "./ui/table";
-import { Dispatch, SetStateAction } from "react";
 
 type Props = {
   fields: string[];
@@ -16,8 +16,7 @@ function TableRows({ fields, color, link }: Props) {
           <TableCell
             key={`${field} index ${index}`}
             className={`font-medium text-beig truncate max-w-[100px] text-center ${
-              index === 0 &&
-              (color ? color + " w-[20px]" : "text-violet w-[20px]")
+              index === 0 && (color ? color : "text-violet w-[20px]")
             } `}
           >
             {link && index == 0 ? (

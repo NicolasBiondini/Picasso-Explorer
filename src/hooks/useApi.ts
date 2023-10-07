@@ -1,10 +1,10 @@
-import { getApi } from "@/lib/getApi";
-import { ApiPromise } from "@polkadot/api";
 import { useEffect, useRef, useState } from "react";
+import { ApiPromise } from "@polkadot/api";
+import { getApi } from "@/lib/getApi";
 
 export const useApi = (provider: string) => {
   const [api, setApi] = useState<ApiPromise>();
-  const flag = useRef(true);
+  const flag = useRef(false);
   useEffect(() => {
     (async () => {
       let { api: finalApi, wsProvider } = await getApi(provider);
@@ -13,10 +13,10 @@ export const useApi = (provider: string) => {
       // which triggers the component to mount, unmount, and remount, resulting in
       // the double connection.
       if (flag.current) {
-        flag.current = false;
         return wsProvider.disconnect();
       }
       setApi(finalApi);
+      flag.current = true;
     })();
   }, []);
 

@@ -1,8 +1,7 @@
-import Logo from "@/components/Logo";
 import "@/styles/globals.css";
 import type { AppProps } from "next/app";
+import Head from "next/head";
 import { Crimson_Text, Mukta } from "next/font/google";
-import Link from "next/link";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ContextProvider } from "@/context/ContextProvider";
 
@@ -27,6 +26,9 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <ContextProvider>
       <QueryClientProvider client={queryClient}>
+        <Head>
+          <title>Picasso Explorer</title>
+        </Head>
         <main
           className={`flex min-h-screen h-full flex-col items-center bg-semiblack text-beige ${crimson.variable} ${mukta.variable} font-mukta`}
         >

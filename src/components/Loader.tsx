@@ -1,8 +1,4 @@
-import React from "react";
-
-type Props = {};
-
-const Loader = (props: Props) => {
+const Loader = () => {
   return (
     <div role="status">
       <svg

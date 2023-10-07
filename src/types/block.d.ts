@@ -1,3 +1,7 @@
+import { Vec } from "@polkadot/types-codec/base";
+import { GenericExtrinsic } from "@polkadot/types/extrinsic";
+import { AnyTuple } from "@polkadot/types-codec/types";
+
 export type BlockInfo = {
   hash: string;
   author: string;
@@ -18,4 +22,5 @@ export type BlockBigInfo = {
   author: string;
   number: number;
   extrinsicCount: number;
+  extrinsics: { finalObject: AnyJSON; hash: `0x${string}` }[] | undefined;
 };
