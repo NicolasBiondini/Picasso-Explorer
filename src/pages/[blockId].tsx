@@ -115,7 +115,7 @@ const BlockPageId = (
           handleSearch={handleSearch}
           blockId={blockId}
           setBlockId={setBlockId}
-          className="w-[60%] max-w-[350px]"
+          className="w-[60%]"
         />
       </nav>
       <section className="flex flex-col gap-y-5 w-[90%] xl:w-[1224px] min-h-[85vh] items-center justify-center font-mukta ">

@@ -44,7 +44,7 @@ const Searcher = ({
   return (
     <form
       onSubmit={handleSubmit}
-      className={`flex max-w-[80%] md:w-full flex-row items-center space-x-2 ${className}`}
+      className={`flex max-w-[80%] md:max-w-[350px] md:w-full flex-row items-center space-x-2 ${className}`}
     >
       <Input
         className="bg-beige w-[70%] text-violet placeholder:text-violet placeholder:font-medium placeholder:text-md "
